@@ -5,10 +5,14 @@ let bodyParser = require('body-parser');
 let cors = require('cors');
 let config = require('config');
 let logger = config.get('app.logger');
+let routes = require('./app/routes');
 
 app.use(cors(config.get('app.cors')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Expose API
+app.use('/api/', routes);
 
 // Start listening on configured port
 let server = app.listen(config.get('app.port'), () => {
