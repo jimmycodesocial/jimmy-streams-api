@@ -30,8 +30,14 @@ router.put('/streams/:name/subscriptions/:stream', subscriptions.put);
 // Remove the subscription existing between two streams
 router.delete('/streams/:name/subscriptions/:stream', subscriptions.delete);
 
-// Activities Collection
-// Receive new activities
+/**
+ * This endpoint registers activities and spread them through the different streams.
+ * The activities are sent to a queue, for fast response, and then analyzed.
+ *
+ * @api {post} /activities Receive new activities
+ * @apiGroup Activities
+ * @apiName createActivity
+ */
 router.post('/activities', activities.create);
 
 // Get the list of activities that were saved in the stream
