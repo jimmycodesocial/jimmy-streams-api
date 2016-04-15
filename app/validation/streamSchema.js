@@ -1,14 +1,10 @@
 'use strict';
 
-/* global module */
+/* global require, module */
 
-module.exports = {
-  'name': {
-    notEmpty: true,
-    errorMessage: 'You should name the stream'
-  },
-  'class': {
-    notEmpty: true,
-    errorMessage: 'You should categorize the stream with a class or type'
-  }
-};
+let Joi = require('joi');
+
+module.exports = Joi.object().keys({
+  'name': Joi.string().required(),
+  'class': Joi.string().required()
+});
