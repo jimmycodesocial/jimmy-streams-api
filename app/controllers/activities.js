@@ -3,7 +3,7 @@
 /* global require, module */
 
 let Joi = require('joi');
-let activitySchemaValidation = require('../validation/activityValidation');
+let activitySchemaValidation = require('../validation/activitySchema');
 let joiErrorSchemaToJsonApi = require('../formatter/joiErrorSchemaToJsonApi');
 
 /**
