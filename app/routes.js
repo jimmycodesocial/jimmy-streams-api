@@ -7,8 +7,14 @@ let streams = require('./controllers/streams');
 let subscriptions = require('./controllers/subscriptions');
 let activities = require('./controllers/activities');
 
-// Streams Collection
-// Create new streams
+/**
+ * This endpoint represents a collection of activities
+ * performed by the stream itself or others streams subscribed to.
+ *
+ * @api {post} /streams Create new streams
+ * @apiGroup Streams
+ * @apiName createStream
+ */
 router.post('/streams', streams.create);
 
 // Subscriptions Collection
