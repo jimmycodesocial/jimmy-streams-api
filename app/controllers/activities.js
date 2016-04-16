@@ -22,7 +22,7 @@ module.exports.create = (req, res, next) => {
   Joi.validate(req.body, activitySchemaValidation, (err, value) => {
     if (err) {
       let errors = joiErrorSchemaToJsonApi(err);
-      logger.warn('Validation problem', {'errors': errors});
+      logger.warn('Validation error', {'errors': errors});
 
       // Format the output to be JSON-API compatible
       // @see: http://jsonapi.org/format/#errors
@@ -38,7 +38,7 @@ module.exports.create = (req, res, next) => {
     }
 
     // Send the activity to the pool to be analyzed
-    poolSQS.sendActivity(req.body, (err) => {
+    poolSQS.sendActivity(value, (err) => {
       if (err) {
         logger.error('Error accepting an activity', { 'error': err });
 
