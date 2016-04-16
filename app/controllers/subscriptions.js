@@ -1,6 +1,11 @@
 'use strict';
 
-/* global require */
+/* global require, module */
+
+let logger = require('config').get('app').logger;
+let Joi = require('joi');
+let subscriptionSchema = require('../validation/subscriptionSchema');
+let joiErrorSchemaToJsonApi = require('../formatter/joiErrorSchemaToJsonApi');
 
 /**
  * Subscribe the stream to another stream
@@ -10,7 +15,29 @@
  * @param next
  */
 module.exports.create = (req, res, next) => {
-  return res.send('TODO:');
+  logger.info('Receive new subscription', {subscription: req.body});
+
+  // Validate json
+  Joi.validate(req.body, subscriptionSchema, (err, value) => {
+    if (err) {
+      let errors = joiErrorSchemaToJsonApi(err);
+      logger.warn('Validation error', {'errors': errors});
+
+      // Format the output to be JSON-API compatible
+      // @see: http://jsonapi.org/format/#errors
+      return res.status(400).json({
+        status: 400,
+        code: 'E_SUBSCRIPTION_VALIDATION',
+        title: 'Validation error',
+        details: 'The subscription cannot take place due to validation errors.',
+        meta: {
+          errors: errors
+        }
+      });
+    }
+
+    return res.status(201).json({});
+  });
 };
 
 /**
