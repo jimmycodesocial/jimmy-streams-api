@@ -1,23 +1,23 @@
 'use strict';
 
-/* global require */
+import config from 'config';
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import {default as router} from './routes';
+let app = express();
+let appConfig = config.app;
+let logger = appConfig.logger;
 
-let config = require('config');
-let app = require('express')();
-let bodyParser = require('body-parser');
-let cors = require('cors');
-let logger = config.get('app.logger');
-let routes = require('./app/routes');
-
-app.use(cors(config.get('app.cors')));
+app.use(cors(appConfig.cors));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Expose API
-app.use('/api/', routes);
+app.use('/api/', router);
 
 // Start listening on configured port
-let server = app.listen(config.get('app.port'), () => {
+let server = app.listen(appConfig.port, () => {
   let addr = server.address();
   let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
 

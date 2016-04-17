@@ -1,11 +1,15 @@
 'use strict';
 
-/* global require */
-
-let router = require('express').Router();
-let streams = require('./controllers/streams');
-let subscriptions = require('./controllers/subscriptions');
-let activities = require('./controllers/activities');
+import Router from 'express';
+import {create as createStream, remove as removeStream} from './controllers/streams';
+import {
+  create as createSubscription,
+  get as getSubscriptions,
+  put as modifySubscription,
+  remove as removeSubscription
+} from './controllers/subscriptions';
+import {create as createActivity, get as getActivities} from './controllers/activities';
+let router = Router();
 
 /**
  * This endpoint represents a collection of activities
@@ -15,20 +19,29 @@ let activities = require('./controllers/activities');
  * @apiGroup Streams
  * @apiName createStream
  */
-router.post('/streams', streams.create);
+router.post('/streams', createStream);
+
+/**
+ * Endpoint to remove an existing stream.
+ *
+ * @api {delete} /streams/:name
+ * @apiGroup Streams
+ * @apiName removeStream
+ */
+router.delete('/streams/:name', removeStream);
 
 // Subscriptions Collection
 // Subscribe the stream to another stream
-router.post('/streams/:name/subscriptions', subscriptions.create);
+router.post('/streams/:name/subscriptions', createSubscription);
 
 // Get the list of subscriptions from the stream
-router.get('/streams/:name/subscriptions', subscriptions.get);
+router.get('/streams/:name/subscriptions', getSubscriptions);
 
 // Modify how a stream is subscribed to another stream
-router.put('/streams/:name/subscriptions/:stream', subscriptions.put);
+router.put('/streams/:name/subscriptions/:stream', modifySubscription);
 
 // Remove the subscription existing between two streams
-router.delete('/streams/:name/subscriptions/:stream', subscriptions.delete);
+router.delete('/streams/:name/subscriptions/:stream', removeSubscription);
 
 /**
  * This endpoint registers activities and spread them through the different streams.
@@ -38,9 +51,12 @@ router.delete('/streams/:name/subscriptions/:stream', subscriptions.delete);
  * @apiGroup Activities
  * @apiName createActivity
  */
-router.post('/activities', activities.create);
+router.post('/activities', createActivity);
 
 // Get the list of activities that were saved in the stream
-router.get('/streams/:name/activities', activities.get);
+router.get('/streams/:name/activities', getActivities);
 
-module.exports = router;
+/**
+ * Expose endpoints
+ */
+export default router;
