@@ -44,7 +44,7 @@ export const create = (req, res) => {
  * @param req
  * @param res
  */
-export const get = (req, res,) => {
+export const get = (req, res) => {
   // TODO: Empty implementation
   return res.status(200).json({});
 };
