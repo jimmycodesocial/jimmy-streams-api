@@ -29,7 +29,7 @@ export const create = (req, res) => {
         status: 400,
         code: 'E_STREAM_VALIDATION',
         title: 'Validation error',
-        details: 'The stream cannot be created due to validation errors.',
+        detail: 'The stream cannot be created due to validation errors.',
         meta: {
           errors: errors
         }
@@ -50,7 +50,7 @@ export const create = (req, res) => {
           status: 500,
           code: 'E_STREAM_CREATION',
           title: 'Error creating the stream',
-          details: 'The stream cannot be created due to internal errors.',
+          detail: 'The stream cannot be created due to internal errors.',
           meta: {
             error: err.message || 'no message'
           }
@@ -88,7 +88,7 @@ export const remove = (req, res) => {
         status: 500,
         code: 'E_STREAM_DELETION',
         title: 'Error removing the stream',
-        details: 'The stream cannot be removed due to internal errors.',
+        detail: 'The stream cannot be removed due to internal errors.',
         meta: {
           error: err.message || 'no message'
         }

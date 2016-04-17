@@ -28,7 +28,7 @@ export const create = (req, res) => {
         status: 400,
         code: 'E_ACTIVITY_VALIDATION',
         title: 'Validation error',
-        details: 'The activity cannot be accepted due to validation errors.',
+        detail: 'The activity cannot be accepted due to validation errors.',
         meta: {
           errors: errors
         }
@@ -44,7 +44,7 @@ export const create = (req, res) => {
           status: 500,
           code: 'E_ACTIVITY_ACCEPTANCE',
           title: 'Activity not accepted',
-          details: 'The activity cannot be accepted due to internal errors while sending it to the pool.'
+          detail: 'The activity cannot be accepted due to internal errors while sending it to the pool.'
         });
       }
 

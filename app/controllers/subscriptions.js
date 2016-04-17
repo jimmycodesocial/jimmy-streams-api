@@ -27,7 +27,7 @@ export const create = (req, res) => {
         status: 400,
         code: 'E_SUBSCRIPTION_VALIDATION',
         title: 'Validation error',
-        details: 'The subscription cannot take place due to validation errors.',
+        detail: 'The subscription cannot take place due to validation errors.',
         meta: {
           errors: errors
         }
