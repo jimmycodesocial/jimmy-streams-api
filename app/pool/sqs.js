@@ -2,9 +2,9 @@
 
 /* global require, module */
 
-let config = require('config');
-let aws = require('aws-sdk');
-let sqsConfig = config.get('sqs');
+import config from 'config';
+import aws from 'aws-sdk';
+let sqsConfig = config.sqs;
 let sqs = new aws.SQS(sqsConfig);
 
 /**
@@ -13,8 +13,8 @@ let sqs = new aws.SQS(sqsConfig);
  * @param activity The Activity
  * @param done     Callback to notify the delivery result
  */
-module.exports.sendActivity = (activity, done) => {
-  var sqsParams = {
+export const sendActivity = (activity, done) => {
+  let sqsParams = {
     QueueUrl: sqsConfig.QueueUrl,
     MessageBody: JSON.stringify(activity)
   };
@@ -24,4 +24,11 @@ module.exports.sendActivity = (activity, done) => {
   return sqs.sendMessage(sqsParams, (err) => {
     return done(err);
   });
+};
+
+/**
+ * Expose API
+ */
+export default {
+  sendActivity: sendActivity
 };
