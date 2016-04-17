@@ -1,21 +1,19 @@
 'use strict';
 
-/* global require, module */
-
-let logger = require('config').get('app').logger;
-let Joi = require('joi');
-let activitySchemaValidation = require('../validation/activitySchema');
-let joiErrorSchemaToJsonApi = require('../formatter/joiErrorSchemaToJsonApi');
-let poolSQS = require('../pool/sqs');
+import Joi from 'joi';
+import config from 'config';
+import {default as activitySchemaValidation} from '../validation/activitySchema';
+import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
+import {sendActivity} from '../pool/sqs';
+let logger = config.get('app').logger;
 
 /**
  * Receive new activities
  *
  * @param req
  * @param res
- * @param next
  */
-module.exports.create = (req, res, next) => {
+export const create = (req, res) => {
   logger.info('Receive new activities', {activity: req.body});
 
   // Validate json
@@ -38,12 +36,12 @@ module.exports.create = (req, res, next) => {
     }
 
     // Send the activity to the pool to be analyzed
-    poolSQS.sendActivity(value, (err) => {
+    sendActivity(value, (err) => {
       if (err) {
-        logger.error('Error accepting an activity', { 'error': err });
+        logger.error('Error accepting an activity', {'error': err});
 
-        return res.status(400).json({
-          status: 400,
+        return res.status(500).json({
+          status: 500,
           code: 'E_ACTIVITY_ACCEPTANCE',
           title: 'Activity not accepted',
           details: 'The activity cannot be accepted due to internal errors while sending it to the pool.'
@@ -61,8 +59,15 @@ module.exports.create = (req, res, next) => {
  *
  * @param req
  * @param res
- * @param next
  */
-module.exports.get = (req, res, next) => {
-  return res.send('TODO:');
+export const get = (req, res) => {
+  // TODO: Empty implementation
+  return res.status(200).json({
+    data: []
+  })
+};
+
+export default {
+  create: create,
+  get: get
 };
