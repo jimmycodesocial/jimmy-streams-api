@@ -1,13 +1,11 @@
 'use strict';
 
-/* global require, module */
-
-let Joi = require('joi');
+import Joi from 'joi';
 
 /**
  * @see: http://activitystrea.ms/specs/json/1.0/#activity
  */
-module.exports = Joi.object().keys({
+export default Joi.object().keys({
   // The date and time at which the activity was published.
   // An activity MUST contain a published property.
   published: Joi.date().iso().required(),

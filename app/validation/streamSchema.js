@@ -1,10 +1,8 @@
 'use strict';
 
-/* global require, module */
+import Joi from 'joi';
 
-let Joi = require('joi');
-
-module.exports = Joi.object().keys({
+export default Joi.object().keys({
   'name': Joi.string().required(),
   'class': Joi.string().required()
 });

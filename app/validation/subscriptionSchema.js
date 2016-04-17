@@ -1,14 +1,12 @@
 'use strict';
 
-/* global require, module */
-
-let Joi = require('joi');
+import Joi from 'joi';
 
 /**
  * Schema definition for endpoint:
  * POST /streams/:name/subscriptions
  */
-module.exports = Joi.object().keys({
+export default Joi.object().keys({
   // Name of the stream. In most scenarios this can be the ID of an object.
   stream: Joi.string().required(),
 
