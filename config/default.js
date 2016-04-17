@@ -42,5 +42,44 @@ module.exports = {
     // The time in seconds that the delivery of all messages in the queue will be delayed.
     // An integer from 0 to 900 (15 minutes). The default for this attribute is 0 (zero).
     DelaySeconds: 0
+  },
+
+  // OrientJS configuration
+  // @see: https://github.com/orientechnologies/orientjs
+  orientdb: {
+    server: {
+      host: '127.0.0.1',
+      port: 2424,
+      username: '<username>',
+      password: '<password>',
+      servers: [
+        {host: '127.0.0.1', port: 2425}
+      ]
+    },
+    db: {
+      name: 'JimmyStreams',
+      username: '<username>',
+      password: '<password>'
+    }
+  },
+
+  // Redis configuration
+  // @see: https://www.npmjs.com/package/redis
+  redis: {
+    host: '127.0.0.1',
+    port: 6379,
+    options: {
+      db: 0
+    }
+  },
+
+  // MongoDB configuration
+  // @see: http://mongodb.github.io/node-mongodb-native/
+  mongodb: {
+    // Default local connection without authentication
+    dns: 'mongodb://127.0.0.1:27017/jimmystreams'
+    // Use the following DNS for authentication
+    // @notice: Replace 127.0.0.1 for the real host
+    // dns: 'mongodb://<user>:<password>@127.0.0.1:27017/jimmystreams'
   }
 };
