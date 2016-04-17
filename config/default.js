@@ -1,12 +1,15 @@
 'use strict';
 
-/* global require, module */
+/* global module */
 
-let winston = require('winston');
+import winston from 'winston';
 
 module.exports = {
   // API config
   app: {
+    // Base URL for resources
+    base_url: 'http://localhost:5000/api/',
+
     // Listen on this port
     port: process.env.PORT || 5000,
 
