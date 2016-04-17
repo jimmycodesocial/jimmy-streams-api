@@ -1,20 +1,18 @@
 'use strict';
 
-/* global require, module */
-
-let logger = require('config').get('app').logger;
-let Joi = require('joi');
-let subscriptionSchema = require('../validation/subscriptionSchema');
-let joiErrorSchemaToJsonApi = require('../formatter/joiErrorSchemaToJsonApi');
+import Joi from 'joi';
+import config from 'config';
+import {default as subscriptionSchema} from '../validation/subscriptionSchema';
+import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
+let logger = config.get('app').logger;
 
 /**
  * Subscribe the stream to another stream
  *
  * @param req
  * @param res
- * @param next
  */
-module.exports.create = (req, res, next) => {
+export const create = (req, res) => {
   logger.info('Receive new subscription', {subscription: req.body});
 
   // Validate json
@@ -45,10 +43,10 @@ module.exports.create = (req, res, next) => {
  *
  * @param req
  * @param res
- * @param next
  */
-module.exports.get = (req, res, next) => {
-  return res.send('TODO:');
+export const get = (req, res,) => {
+  // TODO: Empty implementation
+  return res.status(200).json({});
 };
 
 /**
@@ -56,10 +54,10 @@ module.exports.get = (req, res, next) => {
  *
  * @param req
  * @param res
- * @param next
  */
-module.exports.put = (req, res, next) => {
-  return res.send('TODO:');
+export const put = (req, res) => {
+  // TODO: Empty implementation
+  return res.status(200).json({});
 };
 
 /**
@@ -67,8 +65,15 @@ module.exports.put = (req, res, next) => {
  *
  * @param req
  * @param res
- * @param next
  */
-module.exports.delete = (req, res, next) => {
-  return res.send('TODO:');
+export const remove = (req, res) => {
+  // TODO: Empty implementation
+  return res.status(204).json({});
+};
+
+export default {
+  create: create,
+  get: get,
+  put: put,
+  remove: remove
 };
