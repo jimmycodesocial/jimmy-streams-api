@@ -1,14 +1,12 @@
 'use strict';
 
-/* global module */
-
 /**
  * Extract and format the error list in a Joi validation error
  * @see: https://github.com/hapijs/joi/blob/v8.0.5/API.md#errors
  *
  * @param schema_error joi.validate error result
  */
-module.exports = (schema_error) => {
+export default (schema_error) => {
   if (!schema_error || !schema_error.isJoi) {
     return schema_error;
   }
