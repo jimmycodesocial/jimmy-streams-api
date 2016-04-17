@@ -5,4 +5,4 @@ coverage/
 /.project
 .DS_STORE
 *.log
-/config/env/development.js
+/config/development.js
