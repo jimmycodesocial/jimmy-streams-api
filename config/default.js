@@ -16,7 +16,7 @@ module.exports = {
   // API config
   app: {
     // Base URL for resources
-    base_url: 'http://localhost:5000/api/',
+    baseUrl: 'http://localhost:5000/api/',
 
     // Listen on this port
     port: process.env.PORT || 5000,
@@ -27,7 +27,11 @@ module.exports = {
 
     // Use default configuration
     // @see: https://www.npmjs.com/package/winston
-    logger: logger
+    logger: logger,
+
+    // Pagination limits
+    defaultLimit: 25,
+    maxLimit: 500
   },
 
   // SQS Pool: send activities to this queue system
