@@ -2,7 +2,7 @@
 
 import config from 'config';
 import Serializer from 'jaysonapi';
-let base_url = config.app.base_url;
+let baseUrl = config.app.baseUrl;
 
 /**
  * JSONAPI Serializer for Streams
@@ -11,7 +11,7 @@ let base_url = config.app.base_url;
 export const StreamSerializer = Serializer('stream', {
   attributes: ['name', 'class'],
   links: {
-    self: data => base_url + 'streams/' + data.name
+    self: data => baseUrl + 'streams/' + data.name
   }
 });
 
