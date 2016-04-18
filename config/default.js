@@ -4,6 +4,14 @@
 
 import winston from 'winston';
 
+let logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      colorize: true
+    })
+  ]
+});
+
 module.exports = {
   // API config
   app: {
@@ -19,7 +27,7 @@ module.exports = {
 
     // Use default configuration
     // @see: https://www.npmjs.com/package/winston
-    logger: winston
+    logger: logger
   },
 
   // SQS Pool: send activities to this queue system
@@ -70,16 +78,17 @@ module.exports = {
     port: 6379,
     options: {
       db: 0
-    }
+    },
+    auth: ''
   },
 
   // MongoDB configuration
   // @see: http://mongodb.github.io/node-mongodb-native/
   mongodb: {
     // Default local connection without authentication
-    dns: 'mongodb://127.0.0.1:27017/jimmystreams'
+    dsn: 'mongodb://127.0.0.1:27017/jimmystreams'
     // Use the following DNS for authentication
     // @notice: Replace 127.0.0.1 for the real host
-    // dns: 'mongodb://<user>:<password>@127.0.0.1:27017/jimmystreams'
+    // dsn: 'mongodb://<user>:<password>@127.0.0.1:27017/jimmystreams'
   }
 };
