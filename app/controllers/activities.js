@@ -72,9 +72,20 @@ export const get = (req, res) => {
   let page = req.query.page;
   let limit = req.query.limit;
 
+  logger.info('List activities', {
+    stream: stream,
+    page: page,
+    limit: limit
+  });
+
   // List the activities with pagination
   return paginateActivities(stream, page, limit, (err, results) => {
+    // Error occurred searching the list fo activities.
     if (err) {
+      logger.error('Error searching activities', {'error': err});
+
+      // Format the output to be JSON-API compatible
+      // @see: http://jsonapi.org/format/#errors
       return res.status(500).json({
         status: 500,
         code: 'E_ACTIVITY_SEARCH',
