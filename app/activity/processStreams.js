@@ -40,12 +40,12 @@ export const processStreams = (activity, done) => {
 
     // Connect actor with object
     let subscriptions = [
-      done => {createSubscription(streams[0], streams[1], conditions, done)}
+      next => {createSubscription(streams[0], streams[1], conditions, next)}
     ];
 
     // Connect actor with target if target is present in the activity.
     if (streams.length > 2) {
-      subscriptions.push(done => {createSubscription(streams[0], streams[2], conditions, done)});
+      subscriptions.push(next => {createSubscription(streams[0], streams[2], conditions, next)});
     }
 
     // Make the subscriptions.
