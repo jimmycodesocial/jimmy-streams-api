@@ -21,14 +21,16 @@ export const setClient = (client, done) => {
 /**
  * Search activities with pagination.
  *
- * @param {string}   stream Search activities from this stream
- * @param {integer}  page   Pagination
- * @param {integer}  limit  How many activities per page?
- * @param {function} done   Callback to notify results
+ * @param {string}   stream  Search activities from this stream
+ * @param {integer}  page    Pagination
+ * @param {integer}  limit   How many activities per page?
+ * @param {object}   filters Filter the query.
+ * @param {function} done    Callback to notify results
  */
-export const paginate = (stream, page, limit, done) => {
+export const paginate = (stream, page, limit, filters, done) => {
   page = page || 1;
   limit = limit || 25;
+  filters = filters || {};
 
   let startAt = (page - 1) * limit;
   let collection = mongodb.collection('activities');
