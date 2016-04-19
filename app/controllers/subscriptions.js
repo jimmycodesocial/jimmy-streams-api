@@ -113,14 +113,33 @@ export const put = (req, res) => {
 };
 
 /**
- * Remove the subscription existing between two streams
+ * Remove the subscription existing between two streams.
  *
  * @param req
  * @param res
  */
 export const remove = (req, res) => {
-  // TODO: Empty implementation
-  return res.status(204).json({});
+  let fromStream = req.params.stream;
+  let toStream = req.params.name;
+
+  return removeSubscription(fromStream, toStream, (err) => {
+    // Error removing subscription.
+    if (err) {
+      // Format the output to be JSON-API compatible.
+      // @see: http://jsonapi.org/format/#errors
+      return res.status(500).json({
+        status: 500,
+        code: 'E_SUBSCRIPTION_DELETION',
+        title: 'Error removing the subscription',
+        detail: 'The subscription was not removed due to internal errors.',
+        meta: {
+          error: err.message || 'no message'
+        }
+      });
+    }
+
+    return res.status(204).json({});
+  });
 };
 
 export default {
