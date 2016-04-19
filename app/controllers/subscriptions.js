@@ -67,14 +67,38 @@ export const create = (req, res) => {
 };
 
 /**
- * Get the list of subscriptions from the stream
+ * Get the list of subscriptions from the stream.
  *
  * @param req
  * @param res
  */
 export const get = (req, res) => {
-  // TODO: Empty implementation
-  return res.status(200).json({});
+  let stream = req.query.name;
+  let page = req.query.page;
+  let limit = req.query.limit;
+  let filters = {
+    type: req.query.type,
+    notify: req.query.notify
+  };
+
+  return getSubscriptions(stream, filters, page, limit, (err, streams) => {
+    // Error retrieving the list of subscriptions.
+    if (err) {
+      // Format the output to be JSON-API compatible.
+      // @see: http://jsonapi.org/format/#errors
+      return res.status(500).json({
+        status: 500,
+        code: 'E_SUBSCRIPTION_CREATION',
+        title: 'Error creating the subscription',
+        detail: 'The subscription was not created due to internal errors.',
+        meta: {
+          error: err.message || 'no message'
+        }
+      });
+    }
+
+    return res.status(200).json({data: streams});
+  });
 };
 
 /**
