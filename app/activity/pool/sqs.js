@@ -6,6 +6,7 @@ import config from 'config';
 import aws from 'aws-sdk';
 let sqsConfig = config.sqs;
 let sqs = new aws.SQS(sqsConfig);
+let logger = config.app.logger;
 
 /**
  * Send an activity to the pool. This case a SQS queue.
@@ -14,6 +15,8 @@ let sqs = new aws.SQS(sqsConfig);
  * @param done     Callback to notify the delivery result
  */
 export const sendActivity = (activity, done) => {
+  logger.debug('SQS Pool', {activity: activity});
+
   let sqsParams = {
     QueueUrl: sqsConfig.QueueUrl,
     MessageBody: JSON.stringify(activity)
