@@ -1,5 +1,9 @@
 'use strict';
 
+import config from 'config';
+import async from 'async';
+let logger = config.get('app').logger;
+
 /**
  * Create a node representing the stream.
  * Information about the node is in parameter data.
@@ -12,8 +16,30 @@
  * @param {function} done Callback to notify when the node is created.
  */
 export const createStream = (data, done) => {
+  logger.debug('Creating stream', {stream: data});
+
   // TODO: Empty implementation
   done(null);
+};
+
+/**
+ * Multiple creation nodes representing streams.
+ * @see: createStream
+ *
+ * @param {array}    streams The list fo streams.
+ * [
+ *   {
+ *     name: string, Name of the stream.
+ *     class: string Type of stream.
+ *   }
+ * ]
+ * @param {function} done    Callback to notify when the streams are created.
+ */
+export const createStreams = (streams, done) => {
+  logger.debug('Creating multiple streams');
+
+  // Parallel iterating over each stream data
+  async.each(streams, createStream, done);
 };
 
 /**
@@ -23,7 +49,8 @@ export const createStream = (data, done) => {
  * @param {function} done Callback to notify when the node is removed.
  */
 export const removeStream = (name, done) => {
-  // TODO: Empty implementation
+  logger.debug('Removing stream', {stream: name});
+
   done(null);
 };
 
@@ -43,6 +70,7 @@ export const removeStream = (name, done) => {
  */
 export const createSubscription = (fromStream, toStream, conditions, done) => {
   conditions = conditions || {notify: true};
+  logger.debug('Creating subscription', {from: fromStream, to: toStream, conditions: conditions});
 
   // TODO: Empty implementation
   done(null);
@@ -86,6 +114,7 @@ export const getSubscriptions = (fromStream, filters, page, limit, done) => {
  */
 export const updateSubscriptionStatus = (fromStream, toStream, conditions, done) => {
   conditions = conditions || {notify: true};
+  logger.debug('Update subscription', {from: fromStream, to: toStream, conditions: conditions});
 
   // TODO: Empty implementation
   done(null);
@@ -103,6 +132,8 @@ export const updateSubscriptionStatus = (fromStream, toStream, conditions, done)
  *          if the type is an object then the format is: {name: string, class: string}.
  */
 export const removeSubscription = (fromStream, removeStream, done) => {
+  logger.debug('Removing subscription', {from: fromStream, stream: removeStream});
+
   // TODO: Empty implementation
   done(null);
 };
@@ -112,6 +143,7 @@ export const removeSubscription = (fromStream, removeStream, done) => {
  */
 export default {
   createStream: createStream,
+  createStreams: createStreams,
   removeStream: removeStream,
   createSubscription: createSubscription,
   getSubscriptions: getSubscriptions,
