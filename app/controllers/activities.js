@@ -79,15 +79,12 @@ export const get = (req, res) => {
   let stream = req.params.name;
   let page = req.query.page;
   let limit = req.query.limit;
+  let filters = {};
 
-  logger.info('List activities', {
-    stream: stream,
-    page: page,
-    limit: limit
-  });
+  logger.info('List activities', {stream: stream, page: page, limit: limit});
 
   // List the activities with pagination
-  return paginateActivities(stream, page, limit, (err, results) => {
+  return paginateActivities(stream, page, limit, filters, (err, results) => {
     // Error occurred searching the list fo activities.
     if (err) {
       logger.error('Error searching activities', {'error': err});
