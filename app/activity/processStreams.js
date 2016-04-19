@@ -23,13 +23,13 @@ export const processStreams = (activity, done) => {
   // Extract the important streams.
   // There will be always actor and object.
   let streams = [
-    {name: activity.actor.id, class: activity.actor.objectType},
-    {name: activity.object.id, class: activity.object.objectType}
+    {name: activity.actor.id, type: activity.actor.objectType},
+    {name: activity.object.id, type: activity.object.objectType}
   ];
 
   // Target is optional.
   if (activity.target) {
-    streams.push({name: activity.target.id, class: activity.target.objectType});
+    streams.push({name: activity.target.id, type: activity.target.objectType});
   }
 
   // Make sure that all streams and subscriptions exist.

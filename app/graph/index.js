@@ -16,8 +16,8 @@ let logger = config.get('app').logger;
  *
  * @param {object} data Information to create the node.
  * {
- *   name: string,  Name of the stream. In most scenarios this can be the ID of an object.
- *   class: string  Type of stream. This field helps to identify and organize your streams.
+ *   name: string, Name of the stream. In most scenarios this can be the ID of an object.
+ *   type: string  Type of stream. This field helps to identify and organize your streams.
  * }
  * @param {function} done Callback to notify when the node is created.
  */
@@ -36,7 +36,7 @@ export const createStream = (data, done) => {
  * [
  *   {
  *     name: string, Name of the stream.
- *     class: string Type of stream.
+ *     type: string  Type of stream.
  *   }
  * ]
  * @param {function} done    Callback to notify when the streams are created.
@@ -72,7 +72,7 @@ export const removeStream = (name, done) => {
  * @param {function} done Callback to notify when the subscription is made.
  *
  * @notice: For stream params, if its type is string then only the name is specified,
- *          if the type is an object then the format is: {name: string, class: string}.
+ *          if the type is an object then the format is: {name: string, type: string}.
  */
 export const createSubscription = (fromStream, toStream, conditions, done) => {
   conditions = conditions || {notify: true};
@@ -88,8 +88,8 @@ export const createSubscription = (fromStream, toStream, conditions, done) => {
  * @param {string|object} fromStream The stream.
  * @param {object}        filters    Filter by type of stream or conditions.
  * {
- *   class: string Filter the streams by its class. If it is not specified, all types of stream will be searched.
- *   notify: bool  Only to the streams subscribed with notification.
+ *   type:   string Filter the streams by its type. If it is not specified, all types of stream will be searched.
+ *   notify: bool   Only to the streams subscribed with notification.
  * }
  * @param {number}        page       Paginate the results by pages.
  * @param {number}        limit      How many results should a page have?
@@ -116,7 +116,7 @@ export const getSubscriptions = (fromStream, filters, page, limit, done) => {
  * @param {function}      done       Callback to notify when the subscription is modified.
  *
  * @notice: For stream params, if its type is string then only the name is specified,
- *          if the type is an object then the format is: {name: string, class: string}.
+ *          if the type is an object then the format is: {name: string, type: string}.
  */
 export const updateSubscriptionStatus = (fromStream, toStream, conditions, done) => {
   conditions = conditions || {notify: true};
@@ -135,7 +135,7 @@ export const updateSubscriptionStatus = (fromStream, toStream, conditions, done)
  * @param {function}      done          Callback to notify when the subscription is removed.
  *
  * @notice: For stream params, if its type is string then only the name is specified,
- *          if the type is an object then the format is: {name: string, class: string}.
+ *          if the type is an object then the format is: {name: string, type: string}.
  */
 export const removeSubscription = (fromStream, removeStream, done) => {
   logger.debug('Removing subscription', {from: fromStream, stream: removeStream});
