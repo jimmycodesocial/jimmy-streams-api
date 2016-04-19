@@ -1,3 +1,9 @@
+/*!
+ * jimmy-streams-api
+ * Copyright(c) 2016 Jimmy Code Social (http://jimmycode.com)
+ * ISC Licensed
+ */
+
 'use strict';
 
 import redis from 'redis';
@@ -31,7 +37,7 @@ export const boot = (config, logger, done) => {
       if (err) {
         logger.error('Error authenticating redis');
       }
-      
+
       return done(err, client);
     });
   }

@@ -1,6 +1,10 @@
-'use strict';
+/*!
+ * jimmy-streams-api
+ * Copyright(c) 2016 Jimmy Code Social (http://jimmycode.com)
+ * ISC Licensed
+ */
 
-/* global require, module */
+'use strict';
 
 import config from 'config';
 import aws from 'aws-sdk';
