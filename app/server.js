@@ -6,8 +6,8 @@ import {default as app} from './main';
 import {boot as bootRedis} from './boot/redis';
 import {boot as bootMongoDb} from './boot/mongo';
 import {boot as bootOrientDb} from './boot/orientdb';
-import {setClient as setRedisStorageEngine} from './storage/engine/redis';
-import {setClient as setMongoDbStorageEngine} from './storage/engine/mongodb';
+import {setClient as setRedisStorageEngine} from './activity/storage/engine/redis';
+import {setClient as setMongoDbStorageEngine} from './activity/storage/engine/mongodb';
 let appConfig = config.app;
 let logger = appConfig.logger;
 

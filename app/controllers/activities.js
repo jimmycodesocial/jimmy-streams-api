@@ -4,8 +4,8 @@ import Joi from 'joi';
 import config from 'config';
 import {default as activitySchemaValidation} from '../validation/activitySchema';
 import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
-import {sendActivity} from '../pool/sqs';
-import {paginate as paginateActivities} from '../storage';
+import {sendActivity} from '../activity/pool/sqs';
+import {paginate as paginateActivities} from '../activity/storage';
 let logger = config.get('app').logger;
 
 /**
