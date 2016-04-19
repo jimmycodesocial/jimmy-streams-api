@@ -17,7 +17,7 @@ let logger = config.app.logger;
  */
 const paginateFastEngine = (stream, page, limit, filters, done) => {
   // Search the activities in memory/fast storage
-  return fastEngine.paginate(stream, page, limit, (err, results) => {
+  return fastEngine.paginate(stream, page, limit, filters, (err, results) => {
     if (err) {
       logger.error('Error searching activities from fast engine', {
         error: err.message || '',
@@ -43,7 +43,7 @@ const paginateFastEngine = (stream, page, limit, filters, done) => {
  */
 const paginateHistoricalEngine = (stream, page, limit, filters, done) => {
   // Search the results in the historical storage
-  return historicalEngine.paginate(stream, page, limit, (err, results) => {
+  return historicalEngine.paginate(stream, page, limit, filters, (err, results) => {
     if (err) {
       logger.error('Error searching activities from historical engine', {
         error: err.message || '',
@@ -84,7 +84,7 @@ export const paginate = (stream, page, limit, filters, done) => {
     next => {paginateFastEngine(stream, page, limit, filters, next);},
 
     // Accept the results or look into the historical storage.
-    (next, results) => {
+    (results, next) => {
       // If we found the same amount of results requested,
       // return the results without searching in other engine.
       if (results.length === limit) {
