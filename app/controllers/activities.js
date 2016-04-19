@@ -2,8 +2,10 @@
 
 import Joi from 'joi';
 import config from 'config';
+import async from 'async';
 import {default as activitySchemaValidation} from '../validation/activitySchema';
 import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
+import {processStreams} from '../activity/processStreams';
 import {sendActivity} from '../activity/pool/sqs';
 import {paginate as paginateActivities} from '../activity/storage';
 let logger = config.get('app').logger;
@@ -15,7 +17,7 @@ let logger = config.get('app').logger;
  * @param res
  */
 export const create = (req, res) => {
-  logger.info('Receive new activities', {activity: req.body});
+  logger.info('Receive new activity', {activity: req.body});
 
   // Validate json
   Joi.validate(req.body, activitySchemaValidation, (err, value) => {
@@ -36,13 +38,19 @@ export const create = (req, res) => {
       });
     }
 
-    // Send the activity to the pool to be analyzed
-    sendActivity(value, (err) => {
+    // Pre process the activity and send it into the pool for full processing.
+    async.waterfall([
+      // Process the creation of streams and subscriptions required by the activity.
+      done => {processStreams(value, done);},
+
+      // Send the activity to the pool to be analyzed.
+      done => {sendActivity(value, done);}
+    ], (err) => {
       // Error occurred queueing the activity.
       if (err) {
         logger.error('Error accepting an activity', {'error': err});
 
-        // Format the output to be JSON-API compatible
+        // Format the output to be JSON-API compatible.
         // @see: http://jsonapi.org/format/#errors
         return res.status(500).json({
           status: 500,
@@ -55,7 +63,7 @@ export const create = (req, res) => {
         });
       }
 
-      // The activity was accepted correctly
+      // The activity was accepted correctly.
       return res.status(202).json({});
     });
   });
