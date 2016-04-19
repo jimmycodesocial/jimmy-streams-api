@@ -10,10 +10,11 @@ import Joi from 'joi';
 import config from 'config';
 import {default as subscriptionSchema} from '../validation/subscriptionSchema';
 import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
+import {createSubscription, getSubscriptions, removeSubscription} from '../graph';
 let logger = config.get('app').logger;
 
 /**
- * Subscribe the stream to another stream
+ * Subscribe the stream to another stream.
  *
  * @param req
  * @param res
@@ -21,13 +22,13 @@ let logger = config.get('app').logger;
 export const create = (req, res) => {
   logger.info('Receive new subscription', {subscription: req.body});
 
-  // Validate json
+  // Validate json.
   Joi.validate(req.body, subscriptionSchema, (err, value) => {
     if (err) {
       let errors = joiErrorSchemaToJsonApi(err);
       logger.warn('Validation error', {'errors': errors});
 
-      // Format the output to be JSON-API compatible
+      // Format the output to be JSON-API compatible.
       // @see: http://jsonapi.org/format/#errors
       return res.status(400).json({
         status: 400,
@@ -40,7 +41,28 @@ export const create = (req, res) => {
       });
     }
 
-    return res.status(201).json({});
+    // Subscribe with notification by default.
+    let conditions = {notify: value.notify || true};
+
+    return createSubscription(value.stream, req.params.name, conditions, (err) => {
+      // An error occurred creating the subscription.
+      if (err) {
+        // Format the output to be JSON-API compatible.
+        // @see: http://jsonapi.org/format/#errors
+        return res.status(500).json({
+          status: 500,
+          code: 'E_SUBSCRIPTION_CREATION',
+          title: 'Error creating the subscription',
+          detail: 'The subscription was not created due to internal errors.',
+          meta: {
+            error: err.message || 'no message'
+          }
+        });
+      }
+
+      // Subscription created successfully.
+      return res.status(201).json({});
+    });
   });
 };
 
