@@ -10,7 +10,7 @@ import Joi from 'joi';
 import config from 'config';
 import {default as subscriptionSchema} from '../validation/subscriptionSchema';
 import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
-import {createSubscription, getSubscriptions, removeSubscription} from '../graph';
+import {createSubscription, getSubscriptions, removeSubscription, updateSubscriptionStatus} from '../graph';
 let logger = config.get('app').logger;
 
 /**
@@ -102,14 +102,34 @@ export const get = (req, res) => {
 };
 
 /**
- * Modify how a stream is subscribed to another stream
+ * Modify how a stream is subscribed to another stream.
  *
  * @param req
  * @param res
  */
 export const put = (req, res) => {
-  // TODO: Empty implementation
-  return res.status(200).json({});
+  let fromStream = req.params.stream;
+  let toStream = req.params.name;
+  let conditions = {notify: req.body.notify || true};
+
+  return updateSubscriptionStatus(fromStream, toStream, conditions, (err) => {
+    // Error editing the subscription.
+    if (err) {
+      // Format the output to be JSON-API compatible.
+      // @see: http://jsonapi.org/format/#errors
+      return res.status(500).json({
+        status: 500,
+        code: 'E_SUBSCRIPTION_EDITION',
+        title: 'Error editing the subscription',
+        detail: 'The subscription was not modified due to internal errors.',
+        meta: {
+          error: err.message || 'no message'
+        }
+      });
+    }
+
+    return res.status(200).json({});
+  });
 };
 
 /**
