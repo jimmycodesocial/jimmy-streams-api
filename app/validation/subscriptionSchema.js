@@ -18,5 +18,5 @@ export default Joi.object().keys({
 
   // When is specified as true, the stream subscribed (field: stream)
   // might receive notifications from the stream subscribed to (parameter :name).
-  notify: Joi.boolean().default(false)
+  notify: Joi.boolean().default(true)
 });
