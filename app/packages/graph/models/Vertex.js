@@ -19,7 +19,7 @@ class Vertex {
    */
   constructor (className, schema, superClass, connection) {
     this.superClass = superClass || 'V';
-    
+
     if (!schema instanceof Schema && Vertex.superClass != 'V') {
       throw new TypeError('Schema must be instance of Schema')
     }
@@ -69,9 +69,7 @@ class Vertex {
       return true;
     }
 
-    this.errors = this.schema.validate(data);
-
-    return _.isEmpty(this.errors);
+    return  this.schema.validate(data);
   }
 }
 

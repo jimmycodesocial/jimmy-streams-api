@@ -17,7 +17,6 @@ class GraphManager {
     let validator = GraphConfigurationSchema.validate(configuration);
 
     if (validator.error) {
-      console.log(validator.error);
       throw new Error('Error on configuration schema')
     }
 

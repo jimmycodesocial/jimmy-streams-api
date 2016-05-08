@@ -50,14 +50,13 @@ class VertexCollection {
    * @returns {*}
    */
   create(data, done) {
-    let errors = this.schema.validate(data);
-    if(_.isEmpty(errors)) {
+    if(this.schema.validate(data)) {
 
       this.gm.database.insert().into(this.className).set(data).one()
           .then((record) => done(null, this.inflate(record)));
     } else {
       // Return errors if schema is not valid
-      return done(errors);
+      return done(this.schema.errors);
     }
   }
 
@@ -81,7 +80,7 @@ class VertexCollection {
 
   /**
    * Create or update an edge
-   * 
+   *
    * @param label
    * @param from
    * @param to
@@ -89,7 +88,7 @@ class VertexCollection {
    * @param done
    */
   upsertEdge(label, from, to, data, done) {
-    this.gm.database.select().from(label).where({in: to, out: from}).one().then((edge) => {
+    this.gm.database.select().from('E').where({in: to, out: from}).one().then((edge) => {
       if (edge === undefined) {
         this.createEdge(label, from, to, data, done)
       } else {
@@ -100,7 +99,7 @@ class VertexCollection {
 
   /**
    * Create an edge
-   * 
+   *
    * @param label
    * @param from
    * @param to
@@ -113,7 +112,7 @@ class VertexCollection {
 
   /**
    * Delete edge
-   * 
+   *
    * @param from
    * @param to
    * @param done
@@ -124,7 +123,7 @@ class VertexCollection {
 
   /**
    * Execute query in database
-   * 
+   *
    * @param query
    * @param params
    * @param done

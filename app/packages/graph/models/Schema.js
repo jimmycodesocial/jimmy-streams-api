@@ -1,17 +1,27 @@
 'use strict';
 /* global module, require */
 
-const SchemaValidator = require('validate');
+const Joi = require('joi');
+
+const VertexPropertySchema = Joi.object().pattern(/^[$A-Z_][0-9A-Z_$]*$/i, Joi.object().keys({
+  type: Joi.string().required(),
+  index: Joi.string().default(null)
+}));
+
+const VertexClassSchema = Joi.object().pattern(/^[$A-Z_][0-9A-Z_$]*$/i, VertexPropertySchema);
 
 class Schema {
   constructor(structure) {
     this.structure = structure;
-    // this.validator = new SchemaValidator(structure);
+    this.schemaValidator = VertexClassSchema;
+    this.errors = null;
   }
-  
+
   validate(obj) {
-    // return this.validator.validate(obj, this.structure);
-    return true;
+    let validator = this.schemaValidator.validate(obj);
+    this.errors = validator.error;
+
+    return validator.error == null;
   }
 }
 
