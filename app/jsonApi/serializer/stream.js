@@ -15,9 +15,9 @@ let baseUrl = config.app.baseUrl;
  * @see: http://jsonapi.org/format/#document-structure
  */
 export const StreamSerializer = Serializer('stream', {
-  attributes: ['name', 'type'],
+  attributes: ['id'],
   links: {
-    self: data => baseUrl + 'streams/' + data.name
+    self: data => baseUrl + 'streams/' + data.id
   }
 });
 
