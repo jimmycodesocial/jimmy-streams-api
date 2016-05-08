@@ -48,7 +48,6 @@
     "express-paginate": "^0.2.0",
     "jaysonapi": "^2.0.3",
     "joi": "^8.0.5",
-    "jsonschema": "^1.1.0",
     "lodash": "^4.11.1",
     "mongodb": "^2.1.16",
     "orientjs": "^2.1.11",
