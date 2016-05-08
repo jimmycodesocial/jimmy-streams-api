@@ -43,9 +43,6 @@ router.post('/streams/:name/subscriptions', createSubscription);
 // Get the list of subscriptions from the stream
 router.get('/streams/:name/subscriptions', getSubscriptions);
 
-// Modify how a stream is subscribed to another stream
-router.put('/streams/:name/subscriptions/:stream', modifySubscription);
-
 // Remove the subscription existing between two streams
 router.delete('/streams/:name/subscriptions/:stream', removeSubscription);
 

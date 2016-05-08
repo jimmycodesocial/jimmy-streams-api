@@ -42,7 +42,7 @@ export const create = (req, res) => {
     }
 
     // Subscribe with notification by default.
-    let conditions = {notify: value.notify || true};
+    let conditions = {notify: value.notify};
 
     return createSubscription(value.stream, req.params.name, conditions, (err) => {
       // An error occurred creating the subscription.
@@ -101,36 +101,6 @@ export const get = (req, res) => {
   });
 };
 
-/**
- * Modify how a stream is subscribed to another stream.
- *
- * @param req
- * @param res
- */
-export const put = (req, res) => {
-  let fromStream = req.params.stream;
-  let toStream = req.params.name;
-  let conditions = {notify: req.body.notify || true};
-
-  return updateSubscriptionStatus(fromStream, toStream, conditions, (err) => {
-    // Error editing the subscription.
-    if (err) {
-      // Format the output to be JSON-API compatible.
-      // @see: http://jsonapi.org/format/#errors
-      return res.status(500).json({
-        status: 500,
-        code: 'E_SUBSCRIPTION_EDITION',
-        title: 'Error editing the subscription',
-        detail: 'The subscription was not modified due to internal errors.',
-        meta: {
-          error: err.message || 'no message'
-        }
-      });
-    }
-
-    return res.status(200).json({});
-  });
-};
 
 /**
  * Remove the subscription existing between two streams.
@@ -165,6 +135,5 @@ export const remove = (req, res) => {
 export default {
   create: create,
   get: get,
-  put: put,
   remove: remove
 };

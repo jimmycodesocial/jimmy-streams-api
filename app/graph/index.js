@@ -8,6 +8,9 @@
 
 import config from 'config';
 import async from 'async';
+const Graph = require('./../packages/graph');
+const Stream = require('./../models/Stream');
+
 let logger = config.get('app').logger;
 
 /**
@@ -24,8 +27,9 @@ let logger = config.get('app').logger;
 export const createStream = (data, done) => {
   logger.debug('Creating stream', {stream: data});
 
-  // TODO: Empty implementation
-  done(null);
+  // Update or Insert the Stream in the database
+  Stream.collection.upsert(data, data, done);
+
 };
 
 /**
@@ -51,13 +55,28 @@ export const createStreams = (streams, done) => {
 /**
  * Remove the node representing the stream.
  *
- * @param {string}   name The stream.
+ * @param {string}   id The stream.
  * @param {function} done Callback to notify when the node is removed.
  */
-export const removeStream = (name, done) => {
-  logger.debug('Removing stream', {stream: name});
+export const removeStream = (id, done) => {
+  logger.debug('Removing stream', {stream: id});
+  Stream.collection.delete({'id': id}, done);
+};
 
-  done(null);
+const createStreamFinder = (stream) => {
+  let criteria = null;
+
+  if (typeof (stream) === 'object') {
+    criteria = {id: stream.id};
+
+  } else if (typeof (stream) === 'string'){
+    criteria = {id: stream};
+    stream = criteria;
+  }
+
+  return function (callback){
+    Stream.collection.upsert(criteria, stream, callback);
+  }
 };
 
 /**
@@ -75,11 +94,18 @@ export const removeStream = (name, done) => {
  *          if the type is an object then the format is: {name: string, type: string}.
  */
 export const createSubscription = (fromStream, toStream, conditions, done) => {
-  conditions = conditions || {notify: true};
-  logger.debug('Creating subscription', {from: fromStream, to: toStream, conditions: conditions});
+  let data = conditions || {notify: true};
+  logger.debug('Creating subscription', {from: fromStream, to: toStream, data: data});
 
-  // TODO: Empty implementation
-  done(null);
+  let finders = [createStreamFinder(fromStream), createStreamFinder(toStream)];
+
+  async.parallel(finders, (err, results)=> {
+    if (err) {
+      return done(err);
+    }
+
+    Stream.collection.upsertEdge('SUBSCRIBED_TO', results[0].rid, results[1].rid, data, done);
+  });
 };
 
 /**
@@ -100,30 +126,11 @@ export const getSubscriptions = (fromStream, filters, page, limit, done) => {
   page = page || 1;
   limit = limit || 50;
 
-  // TODO: Empty implementation
-  done(null, []);
-};
-
-/**
- * Modify the terms of subscription between two streams.
- *
- * @param {string|object} fromStream This is the stream subscribed.
- * @param {string|object} toStream   This is the stream to whom subscribes.
- * @param {object}        conditions Subscription conditions.
- * {
- *   notify: bool: The stream subscribed might receive notifications from the stream to whom subscribes.
- * }
- * @param {function}      done       Callback to notify when the subscription is modified.
- *
- * @notice: For stream params, if its type is string then only the name is specified,
- *          if the type is an object then the format is: {name: string, type: string}.
- */
-export const updateSubscriptionStatus = (fromStream, toStream, conditions, done) => {
-  conditions = conditions || {notify: true};
-  logger.debug('Update subscription', {from: fromStream, to: toStream, conditions: conditions});
-
-  // TODO: Empty implementation
-  done(null);
+  Stream.collection.query('SELECT findSubscribers(:starter, :offset, :quantity) AS result', {
+    'starter': fromStream,
+    'offset': limit * (page - 1),
+    'quantity': limit
+  }, done);
 };
 
 /**
@@ -131,17 +138,25 @@ export const updateSubscriptionStatus = (fromStream, toStream, conditions, done)
  * That means an stream is not longer interested in the stream to which is currently subscribed.
  *
  * @param {string|object} fromStream    This is the stream subscribed.
- * @param {string|object} removeStream  This is the stream to whom subscribes.
+ * @param {string|object} toStream      This is the stream to whom subscribes.
  * @param {function}      done          Callback to notify when the subscription is removed.
  *
  * @notice: For stream params, if its type is string then only the name is specified,
  *          if the type is an object then the format is: {name: string, type: string}.
  */
-export const removeSubscription = (fromStream, removeStream, done) => {
-  logger.debug('Removing subscription', {from: fromStream, stream: removeStream});
+export const removeSubscription = (fromStream, toStream, done) => {
+  logger.debug('Removing subscription', {from: fromStream, stream: toStream});
 
-  // TODO: Empty implementation
-  done(null);
+  let finders = [createStreamFinder(fromStream), createStreamFinder(toStream)];
+
+  async.parallel(finders, (err, results)=> {
+    if (err) {
+      return done(err);
+    }
+
+    console.log(results);
+    Stream.collection.deleteEdge(results[0].rid, results[1].rid, (err, count) => {console.log(err, count); done(err, count)});
+  });
 };
 
 /**
@@ -153,6 +168,5 @@ export default {
   removeStream: removeStream,
   createSubscription: createSubscription,
   getSubscriptions: getSubscriptions,
-  updateSubscriptionStatus: updateSubscriptionStatus,
   removeSubscription: removeSubscription
 }
