@@ -4,7 +4,6 @@
 const OrientDB = require('orientjs');
 const _ = require('lodash');
 const config = require('config');
-const Joi = require('joi');
 const async = require('async');
 const GraphConfigurationSchema = require('./../config/configSchema');
 
