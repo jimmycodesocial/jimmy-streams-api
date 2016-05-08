@@ -4,7 +4,7 @@
 const OrientDB = require('orientjs');
 const _ = require('lodash');
 const config = require('config');
-const JsonSchema = require('jsonschema');
+const Joi = require('joi');
 const async = require('async');
 const GraphConfigurationSchema = require('./../config/configSchema');
 
@@ -14,11 +14,13 @@ class GraphManager {
   constructor(connection) {
 
     let configuration = config.get('orientdb');
-    // let result = JsonSchema.validate(configuration, GraphConfigurationSchema);
-    //
-    // if (result.valid == false) {
-    //   throw new Error('Error on configuration schema')
-    // }
+
+    let validator = GraphConfigurationSchema.validate(configuration);
+
+    if (validator.error) {
+      console.log(validator.error);
+      throw new Error('Error on configuration schema')
+    }
 
     this.connection = connection || 'default';
 
@@ -52,7 +54,7 @@ class GraphManager {
         });
       } else {
         done(null, this.database);
-      }      
+      }
     });
   }
 
@@ -136,7 +138,7 @@ class GraphManager {
     if (connection !== undefined && instances[connection] === undefined) {
       instances[connection] = new GraphManager(connection);
     }
-    
+
     //noinspection JSAnnotator
     return instances[connection];
   }

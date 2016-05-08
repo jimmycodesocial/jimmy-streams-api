@@ -1,51 +1,32 @@
 'use strict';
 /* global module */
+const Joi = require('joi');
 
-const GraphConfigurationSchema = {
-  "id": "/GraphConfiguration",
-  "type": "object",
-  "properties": {
-    "connections": {
-      "type": "object",
-      "properties": {
-        "type": "object",
-        "properties": {
-          "name": "string",
-          "server": {
-            "type": "object",
-            "properties": {
-              "host": "string",
-              "port": "int",
-              "username": "string",
-              "password": "string",
-              "servers": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "host": "string",
-                    "port": "int"
-                  }
-                }
-              }
-            },
-            "required": ["host"]
-          },
-          "database": {
-            "type": "object",
-            "properties": {
-              "name": "string",
-              "username": "string",
-              "password": "string"
-            },
-            "required": ["name", "username", "password"]
-          }
-        },
-        "required": ["server", "database"]
-      }
-    }
-  },
-  "required": ["connections"]
-};
+
+const ConnectionServerSchema = Joi.object().keys({
+  host: Joi.string().required(),
+  port: Joi.number().integer().required(),
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  servers: Joi.array().items(Joi.object().keys({
+    host: Joi.string().required(),
+    port: Joi.number().integer().required()
+  }))
+});
+
+const ConnectionDatabaseSchema = Joi.object().keys({
+  name: Joi.string().required(),
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  type: Joi.string().default('graph'),
+  storage: Joi.string().default('plocal')
+});
+
+const GraphConfigurationSchema = Joi.object().keys({
+  connections: Joi.object().pattern(/^[$A-Z_][0-9A-Z_$]*$/i, Joi.object().keys({
+    server: ConnectionServerSchema,
+    database: ConnectionDatabaseSchema
+  }))
+});
 
 module.exports = GraphConfigurationSchema;
