@@ -66,19 +66,25 @@ module.exports = {
   // OrientJS configuration
   // @see: https://github.com/orientechnologies/orientjs
   orientdb: {
-    server: {
-      host: '127.0.0.1',
-      port: 2424,
-      username: '<username>',
-      password: '<password>',
-      servers: [
-        {host: '127.0.0.1', port: 2425}
-      ]
-    },
-    db: {
-      name: 'JimmyStreams',
-      username: '<username>',
-      password: '<password>'
+    connections: {
+      default: {
+        server: {
+          host: '127.0.0.1',
+          port: 2424,
+          username: 'root',
+          password: 'ok',
+          servers: [
+            {host: '127.0.0.1', port: 2425}
+          ]
+        },
+        database: {
+          name: 'streams',
+          username: 'root',
+          password: 'ok',
+          type: 'graph',
+          storage: 'plocal'
+        }
+      }
     }
   },
 
