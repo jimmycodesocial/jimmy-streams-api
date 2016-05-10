@@ -3,6 +3,7 @@
 
 const GraphManager = require('./GraphManager');
 const _ = require('lodash');
+const async = require('async');
 
 class VertexCollection {
   constructor (className, schema, connection) {
@@ -130,9 +131,12 @@ class VertexCollection {
    */
   query(query, params, done) {
     this.gm.database.query(query, {params: params}).then((results) => {
-      // Todo: Inflate results
       done(null, results);
-    });
+    }, done);
+  }
+
+  getQueryBuilder() {
+    return this.gm.database;
   }
 }
 

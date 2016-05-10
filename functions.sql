@@ -9,5 +9,5 @@
 DELETE FROM OFunction where name = 'findSubscriptions';
 
 CREATE FUNCTION findSubscriptions
-"SELECT expand(in('SUBSCRIBED_TO').id) from (SELECT FROM Stream WHERE id = :starter) SKIP :offset LIMIT :quantity;"
+"SELECT expand(in('SUBSCRIBED_TO')) from (SELECT FROM Stream WHERE id = :starter) SKIP :offset LIMIT :quantity;"
 PARAMETERS [starter, offset, quantity] IDEMPOTENT false LANGUAGE sql

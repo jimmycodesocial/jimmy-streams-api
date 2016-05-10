@@ -126,11 +126,10 @@ export const getSubscriptions = (fromStream, filters, page, limit, done) => {
   page = page || 1;
   limit = limit || 50;
 
-  Stream.collection.query('SELECT findSubscribers(:starter, :offset, :quantity) AS result', {
-    'starter': fromStream,
-    'offset': limit * (page - 1),
-    'quantity': limit
-  }, done);
+  let qb = Stream.collection.getQueryBuilder();
+  qb.select(`findSubscriptions('${fromStream}', ${limit * (page - 1)}, ${limit}) AS subscriptions`).fetch({ "*": 1 }).all().then((results) => {
+    async.map(results[0].subscriptions, (item, callback) => callback(null, {id: item.id}), done);
+  });
 };
 
 /**
