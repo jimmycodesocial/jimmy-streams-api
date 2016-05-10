@@ -6,8 +6,8 @@
 --   * offset: Pagination control, use with SKIP
 --   * quantity: Pagination control, use with LIMIT
 -----------------------------------------------------------------------------------------------------------------------
-DELETE FROM OFunction where name = 'findSubscribers';
+DELETE FROM OFunction where name = 'findSubscriptions';
 
-CREATE FUNCTION findSubscribers
+CREATE FUNCTION findSubscriptions
 "SELECT expand(in('SUBSCRIBED_TO').id) from (SELECT FROM Stream WHERE id = :starter) SKIP :offset LIMIT :quantity;"
 PARAMETERS [starter, offset, quantity] IDEMPOTENT false LANGUAGE sql
