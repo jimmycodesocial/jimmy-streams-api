@@ -73,7 +73,7 @@ export const create = (req, res) => {
  * @param res
  */
 export const get = (req, res) => {
-  let stream = req.query.name;
+  let stream = req.params.name;
   let page = req.query.page;
   let limit = req.query.limit;
   let filters = {
@@ -88,9 +88,9 @@ export const get = (req, res) => {
       // @see: http://jsonapi.org/format/#errors
       return res.status(500).json({
         status: 500,
-        code: 'E_SUBSCRIPTION_CREATION',
-        title: 'Error creating the subscription',
-        detail: 'The subscription was not created due to internal errors.',
+        code: 'E_RETRIEVE_SUBSCRIPTIONS',
+        title: 'Error retrieving the subscription list',
+        detail: 'The subscription was not retrieve due to internal errors.',
         meta: {
           error: err.message || 'no message'
         }
