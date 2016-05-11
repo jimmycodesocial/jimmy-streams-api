@@ -3,7 +3,6 @@
 
 const GraphManager = require('./GraphManager');
 const _ = require('lodash');
-const async = require('async');
 
 class VertexCollection {
   constructor (className, schema, connection) {
@@ -21,8 +20,14 @@ class VertexCollection {
    * @param done
    */
   upsert(criteria, data, done) {
-    this.gm.database.update(this.className).set(data).upsert(criteria).return('after @this').one()
+    // Validate data before the upset
+    if(this.schema.validate(data)) {
+      this.gm.database.update(this.className).set(data).upsert(criteria).return('after @this').one()
         .then((record) => { done(null, this.inflate(record)); });
+    } else {
+      // Return errors if schema is not valid
+      done(this.schema.errors);
+    }
   }
 
   /**
@@ -51,8 +56,8 @@ class VertexCollection {
    * @returns {*}
    */
   create(data, done) {
+    // Validate data
     if(this.schema.validate(data)) {
-
       this.gm.database.insert().into(this.className).set(data).one()
           .then((record) => done(null, this.inflate(record)));
     } else {

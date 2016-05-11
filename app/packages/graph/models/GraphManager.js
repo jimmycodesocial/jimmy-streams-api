@@ -6,6 +6,7 @@ const _ = require('lodash');
 const config = require('config');
 const async = require('async');
 const GraphConfigurationSchema = require('./../config/configSchema');
+const GraphError = require('./../exception');
 
 let instances = {};
 
@@ -17,13 +18,13 @@ class GraphManager {
     let validator = GraphConfigurationSchema.validate(configuration);
 
     if (validator.error) {
-      throw new Error('Error on configuration schema')
+      throw new GraphError('CONFIGURATION_SCHEMA_ERROR', 'Invalid configuration schema', {errors: validator.error});
     }
 
     this.connection = connection || 'default';
 
     if (configuration.connections[this.connection] === undefined) {
-      throw Error('Connection "' + this.connection + '" not defined in configuration')
+      throw new GraphError('CONNECTION_NOT_FOUND','Connection "' + this.connection + '" not defined in configuration')
     }
 
     this.config = configuration.connections[this.connection];
