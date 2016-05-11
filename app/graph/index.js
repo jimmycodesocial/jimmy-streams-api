@@ -8,7 +8,6 @@
 
 import config from 'config';
 import async from 'async';
-const Graph = require('./../packages/graph');
 const Stream = require('./../models/Stream');
 
 let logger = config.get('app').logger;
