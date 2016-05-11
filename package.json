@@ -53,6 +53,7 @@
     "orientjs": "^2.1.11",
     "redis": "^2.6.0-1",
     "util": "^0.10.3",
+    "validate": "^3.0.1",
     "winston": "^2.2.0"
   },
   "devDependencies": {
