@@ -9,6 +9,7 @@
 import Joi from 'joi';
 import config from 'config';
 import async from 'async';
+import shortid from 'shortid';
 import {default as activitySchemaValidation} from '../validation/activitySchema';
 import {default as joiErrorSchemaToJsonApi} from './../jsonApi/formatter/joiErrorSchemaToJsonApi';
 import {processStreams} from '../activity/processStreams';
@@ -44,13 +45,16 @@ export const create = (req, res) => {
       });
     }
 
+    // Provide en unique ID to the activity
+    let activity = {...value, aid: shortid.generate()};
+
     // Pre process the activity and send it into the pool for full processing.
     async.waterfall([
       // Process the creation of streams and subscriptions required by the activity.
-      done => {processStreams(value, done);},
+      done => {processStreams(activity, done);},
 
       // Send the activity to the pool to be analyzed.
-      done => {sendActivity(value, done);}
+      done => {sendActivity(activity, done);}
     ], (err) => {
       // Error occurred queueing the activity.
       if (err) {
