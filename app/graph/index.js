@@ -113,7 +113,6 @@ export const createSubscription = (fromStream, toStream, conditions, done) => {
  * @param {string|object} fromStream The stream.
  * @param {object}        filters    Filter by type of stream or conditions.
  * {
- *   type:   string Filter the streams by its type. If it is not specified, all types of stream will be searched.
  *   notify: bool   Only to the streams subscribed with notification.
  * }
  * @param {number}        page       Paginate the results by pages.
@@ -126,7 +125,7 @@ export const getSubscriptions = (fromStream, filters, page, limit, done) => {
   limit = limit || 50;
 
   let qb = Stream.collection.getQueryBuilder();
-  qb.select(`findSubscriptions('${fromStream}', ${limit * (page - 1)}, ${limit}) AS subscriptions`).fetch({ "*": 1 }).all().then((results) => {
+  qb.select(`findSubscriptions('${fromStream}', '${filters.notify}', ${limit * (page - 1)}, ${limit}) AS subscriptions`).fetch({ "*": 1 }).all().then((results) => {
     async.map(results[0].subscriptions, (item, callback) => callback(null, {id: item.id}), done);
   });
 };
