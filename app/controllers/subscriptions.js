@@ -77,7 +77,7 @@ export const get = (req, res) => {
   let page = req.query.page;
   let limit = req.query.limit;
   let filters = {
-    notify: req.query.notify
+    notify: req.query.notify == undefined ? false : req.query.notify
   };
 
   return getSubscriptions(stream, filters, page, limit, (err, streams) => {
