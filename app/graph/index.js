@@ -120,7 +120,6 @@ export const createSubscription = (fromStream, toStream, conditions, done) => {
  * @param {function}      done       Callback to notify with the results.
  */
 export const getSubscriptions = (fromStream, filters, page, limit, done) => {
-  filters = filters || {};
   page = page || 1;
   limit = limit || 50;
 
