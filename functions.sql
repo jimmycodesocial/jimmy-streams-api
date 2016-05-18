@@ -9,5 +9,7 @@
 DELETE FROM OFunction where name = 'findSubscriptions';
 
 CREATE FUNCTION findSubscriptions
-"SELECT expand(in('SUBSCRIBED_TO')) from (SELECT FROM Stream WHERE id = :starter) SKIP :offset LIMIT :quantity;"
-PARAMETERS [starter, offset, quantity] IDEMPOTENT false LANGUAGE sql
+"SELECT EXPAND(out) FROM SUBSCRIBED_TO WHERE in.id = :starter AND notify = :notification skip :offset limit :quantity;"
+PARAMETERS [starter, notification, offset, quantity] IDEMPOTENT true LANGUAGE sql
+
+SELECT EXPAND(out) FROM SUBSCRIBED_TO WHERE in.id = :starter AND notify = :notification skip :offset limit :quantity
