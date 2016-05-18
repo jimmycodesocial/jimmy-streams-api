@@ -77,7 +77,6 @@ export const get = (req, res) => {
   let page = req.query.page;
   let limit = req.query.limit;
   let filters = {
-    type: req.query.type,
     notify: req.query.notify
   };
 
