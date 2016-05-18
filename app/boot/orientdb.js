@@ -5,9 +5,8 @@
  */
 
 'use strict';
-const Graph = require('./../packages/graph');
-const async = require('async');
-const _ = require('lodash');
+import * as Graph from './../packages/graph';
+
 
 /**
  * Connect to OrientDb.

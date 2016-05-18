@@ -1,10 +1,9 @@
 'use strict';
-/* global module, require */
 
-const Joi = require('joi');
-const SchemaValidator = require('validate');
-const GraphError = require('./../exception');
-const _ = require('lodash');
+import Joi from 'joi';
+import SchemaValidator from 'validate';
+import GraphError  from './../exception';
+import _ from 'lodash';
 
 const VertexClassSchema = Joi.object().pattern(/^[$A-Z_][0-9A-Z_$]*$/i, Joi.object().keys({
   type: Joi.string().required(),
@@ -12,6 +11,7 @@ const VertexClassSchema = Joi.object().pattern(/^[$A-Z_][0-9A-Z_$]*$/i, Joi.obje
   match: Joi.string().default(null),
   message: Joi.string().default('There is an error')
 }));
+
 
 class Schema {
   constructor(structure) {
@@ -45,5 +45,5 @@ class Schema {
   }
 }
 
-module.exports = Schema;
+export default Schema;
 

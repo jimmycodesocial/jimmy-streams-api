@@ -1,11 +1,7 @@
 'use strict';
 
-/* global module, require */
-
-const util = require('util');
-const _ = require('lodash');
-const Schema = require('./Schema');
-const VertexCollection = require('./VertexCollection');
+import Schema from './Schema';
+import VertexCollection from './VertexCollection';
 
 
 class Vertex {
@@ -73,4 +69,4 @@ class Vertex {
   }
 }
 
-module.exports = Vertex;
+export default Vertex;

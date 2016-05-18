@@ -1,8 +1,7 @@
 'use strict';
-/*globals require, exports*/
 
-const GraphManager = require('./GraphManager');
-const _ = require('lodash');
+import * as GraphManager from './GraphManager';
+
 
 class VertexCollection {
   constructor (className, schema, connection) {
@@ -145,4 +144,4 @@ class VertexCollection {
   }
 }
 
-module.exports = VertexCollection;
+export default VertexCollection;

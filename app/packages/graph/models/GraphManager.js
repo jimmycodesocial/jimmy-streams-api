@@ -1,14 +1,14 @@
 'use strict';
-/* global module, exports, require */
 
-const OrientDB = require('orientjs');
-const _ = require('lodash');
-const config = require('config');
-const async = require('async');
-const GraphConfigurationSchema = require('./../config/configSchema');
-const GraphError = require('./../exception');
+import OrientDB from 'orientjs';
+import _ from 'lodash';
+import config from 'config';
+import async from 'async';
+import GraphConfigurationSchema  from './../config/configSchema';
+import GraphError from './../exception';
 
 let instances = {};
+
 
 class GraphManager {
   constructor(connection) {
@@ -143,7 +143,7 @@ class GraphManager {
   }
 }
 
-exports.getInstance = function(connection) {
+export const getInstance = function(connection) {
   return GraphManager.getInstance(connection)
 };
 

@@ -1,13 +1,10 @@
 'use strict';
-/* global module, exports, require */
 
-const Vertex = require('./models/Vertex');
-const Schema = require('./models/Schema');
-const VertexCollection = require('./models/VertexCollection');
-
-
-const GraphManager = require('./models/GraphManager');
-const async = require('async');
+import async from 'async';
+import * as GraphManager from './models/GraphManager';
+import VertexCollection from './models/VertexCollection';
+import {default as ParentSchema} from './models/Schema';
+import {default as ParentVertex} from './models/Vertex';
 
 let models = {};
 
@@ -21,16 +18,16 @@ let models = {};
  * @returns {{new(*): {isValid: (function(*=): Boolean), delete: (function(*=)), save: (function(*): *), data, data}, new(*=, *=, *=, *=): {isValid: (function(*=): Boolean), delete: (function(*=)), save: (function(*): *), data, data}}|*}
  * @constructor
  */
-exports.Vertex = function(className, schema, superClass, connection) {
+export var Vertex = function(className, schema, superClass, connection) {
   superClass = superClass || 'V';
   connection = connection || 'default';
-  
+
   let identifier = superClass + '_' + className;
 
   if (models[identifier] === undefined) {
 
     models[identifier] = {
-      'classObject': class extends Vertex {
+      'classObject': class extends ParentVertex {
         constructor(data) {
           super(className, schema, superClass, connection);
           this.data = data;
@@ -44,7 +41,7 @@ exports.Vertex = function(className, schema, superClass, connection) {
 
     models[identifier]['classObject']['collection'] = new VertexCollection(className, schema, connection);
   }
-  
+
   return models[identifier].classObject;
 };
 
@@ -55,22 +52,22 @@ exports.Vertex = function(className, schema, superClass, connection) {
  * @returns {Schema}
  * @constructor
  */
-exports.Schema = function(structure){
-  return new Schema(structure);
+export var Schema = function(structure){
+  return new ParentSchema(structure);
 };
 
 /**
  * Exports Graph Manager
  */
-exports.gm = GraphManager;
+export var gm = GraphManager;
 
 /**
  * Connect to databse in config. Create or Update database schema if needed.
- * 
+ *
  * @param config
  * @param done
  */
-exports.connect = function(config, done) {
+export var connect = function(config, done) {
 
   let boot_connections = [];
 
@@ -85,7 +82,7 @@ exports.connect = function(config, done) {
 
   async.series(boot_connections, (err) => {
     if (err) return done(err);
-    
+
     // Create or Update every model in Graph
     let tasks = [];
     for (let key in models) {
@@ -96,7 +93,7 @@ exports.connect = function(config, done) {
         gm.createClassIfNotExist(item.className, item.superClass, (err) => {
           gm.syncClassProperties(item.className, item.schema, cb)
         });
-        
+
       });
     }
 

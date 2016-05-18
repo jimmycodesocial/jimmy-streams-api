@@ -8,4 +8,4 @@ var GraphError = function(name, message, meta) {
     this.toString = () => `${this.name}: ${this.message}`;
 };
 
-module.exports = GraphError;
+export default GraphError;

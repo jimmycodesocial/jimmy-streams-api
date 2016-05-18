@@ -1,7 +1,6 @@
 'use strict';
-/* global module */
-const Joi = require('joi');
 
+import Joi from 'joi';
 
 const ConnectionServerSchema = Joi.object().keys({
   host: Joi.string().required(),
@@ -29,4 +28,4 @@ const GraphConfigurationSchema = Joi.object().keys({
   }))
 });
 
-module.exports = GraphConfigurationSchema;
+export default GraphConfigurationSchema;
