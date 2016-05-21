@@ -5,6 +5,8 @@
  */
 
 'use strict';
+import * as Graph from './../packages/graph';
+
 
 /**
  * Connect to OrientDb.
@@ -14,9 +16,16 @@
  * @param {function} done   Callback to notify the result.
  */
 export const boot = (config, logger, done) => {
-  logger.warn('Boot orientdb: Not implemented');
-
-  return done(null, null);
+  logger.debug('Boot orientdb connections');
+  Graph.connect(config, (err) => {
+    if (err) {
+      logger.error('Error connecting to orientdb', {error: err.message || ''});
+    }
+    else {
+      logger.info('Connected to orientdb');
+    }
+    done(err)
+  });
 };
 
 export default boot;

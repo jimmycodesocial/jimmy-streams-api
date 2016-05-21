@@ -66,7 +66,7 @@ export const create = (req, res) => {
       // Acknowledge the creation
       return res.status(201).json(StreamSerializer.serialize({
         // Use the name as Id
-        data: {...value, id: value.name}
+        data: value
       }));
     });
   });
@@ -85,9 +85,8 @@ export const remove = (req, res) => {
   logger.info('Remove an stream', {stream: stream});
 
   return removeStream(stream, (err) => {
-    logger.error('Error removing the stream', {'stream': stream});
-
     if (err) {
+      logger.error('Error removing the stream', {'stream': stream});
       // Format the output to be JSON-API compatible
       // @see: http://jsonapi.org/format/#errors
       return res.status(500).json({
