@@ -1,7 +1,7 @@
 'use strict';
 /* global require, module */
 
-const Graph = require('./../packages/graph');
+import * as Graph from './../packages/graph';
 
 const streamSchema = Graph.Schema({
   id: {
@@ -10,4 +10,4 @@ const streamSchema = Graph.Schema({
   }
 });
 
-module.exports = Graph.Vertex('Stream', streamSchema);
+export default Graph.Vertex('Stream', streamSchema);
