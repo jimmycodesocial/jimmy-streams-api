@@ -1,13 +1,13 @@
 'use strict';
 /* global require, module */
 
-import * as Graph from './../packages/graph';
+import * as rieluz from 'rieluz';
 
-const streamSchema = Graph.Schema({
+const streamSchema = rieluz.Schema({
   id: {
     type: 'string',
     index: 'UNIQUE_HASH_INDEX'
   }
 });
 
-export default Graph.Vertex('Stream', streamSchema);
+export default rieluz.Vertex('Stream', streamSchema);

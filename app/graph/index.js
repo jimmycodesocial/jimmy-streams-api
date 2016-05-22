@@ -8,7 +8,7 @@
 
 import config from 'config';
 import async from 'async';
-const Stream = require('./../models/Stream');
+import Stream from './../models/Stream';
 
 let logger = config.get('app').logger;
 

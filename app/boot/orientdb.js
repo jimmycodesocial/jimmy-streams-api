@@ -5,8 +5,7 @@
  */
 
 'use strict';
-import * as Graph from './../packages/graph';
-
+import * as rieluz from 'rieluz';
 
 /**
  * Connect to OrientDb.
@@ -16,8 +15,8 @@ import * as Graph from './../packages/graph';
  * @param {function} done   Callback to notify the result.
  */
 export const boot = (config, logger, done) => {
-  logger.debug('Boot orientdb connections');
-  Graph.connect(config, (err) => {
+  logger.debug('Boot orientDB connections');
+  rieluz.connect(config, (err) => {
     if (err) {
       logger.error('Error connecting to orientdb', {error: err.message || ''});
     }
