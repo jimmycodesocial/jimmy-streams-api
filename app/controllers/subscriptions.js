@@ -44,7 +44,7 @@ export const create = (req, res) => {
     // Subscribe with notification by default.
     let conditions = {notify: value.notify};
 
-    return createSubscription(value.stream, req.params.name, conditions, (err) => {
+    return createSubscription(value.stream, req.params.id, conditions, (err) => {
       // An error occurred creating the subscription.
       if (err) {
         // Format the output to be JSON-API compatible.
@@ -73,7 +73,7 @@ export const create = (req, res) => {
  * @param res
  */
 export const get = (req, res) => {
-  let stream = req.params.name;
+  let stream = req.params.id;
   let page = req.query.page;
   let limit = req.query.limit;
   let filters = {
@@ -109,7 +109,7 @@ export const get = (req, res) => {
  */
 export const remove = (req, res) => {
   let fromStream = req.params.stream;
-  let toStream = req.params.name;
+  let toStream = req.params.id;
 
   return removeSubscription(fromStream, toStream, (err) => {
     // Error removing subscription.

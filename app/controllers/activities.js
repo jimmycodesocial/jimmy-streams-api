@@ -86,7 +86,7 @@ export const create = (req, res) => {
  * @param res
  */
 export const get = (req, res) => {
-  let stream = req.params.name;
+  let stream = req.params.id;
   let page = req.query.page;
   let limit = req.query.limit;
   let filters = {};

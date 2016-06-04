@@ -65,7 +65,6 @@ export const create = (req, res) => {
 
       // Acknowledge the creation
       return res.status(201).json(StreamSerializer.serialize({
-        // Use the name as Id
         data: value
       }));
     });
@@ -79,7 +78,7 @@ export const create = (req, res) => {
  * @param res
  */
 export const remove = (req, res) => {
-  let stream = req.params.name;
+  let stream = req.params.id;
 
   // Remove the node from the graph
   logger.info('Remove an stream', {stream: stream});

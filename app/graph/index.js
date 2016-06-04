@@ -18,8 +18,7 @@ let logger = config.get('app').logger;
  *
  * @param {object} data Information to create the node.
  * {
- *   name: string, Name of the stream. In most scenarios this can be the ID of an object.
- *   type: string  Type of stream. This field helps to identify and organize your streams.
+ *   id: string, Id of the stream. In most scenarios this can be the ID of an object.
  * }
  * @param {function} done Callback to notify when the node is created.
  */
@@ -38,8 +37,7 @@ export const createStream = (data, done) => {
  * @param {array}    streams The list fo streams.
  * [
  *   {
- *     name: string, Name of the stream.
- *     type: string  Type of stream.
+ *     id: string, Id of the stream.
  *   }
  * ]
  * @param {function} done    Callback to notify when the streams are created.
@@ -89,8 +87,8 @@ const createStreamFinder = (stream) => {
  * }
  * @param {function} done Callback to notify when the subscription is made.
  *
- * @notice: For stream params, if its type is string then only the name is specified,
- *          if the type is an object then the format is: {name: string, type: string}.
+ * @notice: For stream params, if its type is string then only the id is specified,
+ *          if the type is an object then the format is: {id: string}.
  */
 export const createSubscription = (fromStream, toStream, conditions, done) => {
   let data = conditions || {notify: true};
@@ -137,8 +135,8 @@ export const getSubscriptions = (fromStream, filters, page, limit, done) => {
  * @param {string|object} toStream      This is the stream to whom subscribes.
  * @param {function}      done          Callback to notify when the subscription is removed.
  *
- * @notice: For stream params, if its type is string then only the name is specified,
- *          if the type is an object then the format is: {name: string, type: string}.
+ * @notice: For stream params, if its type is string then only the id is specified,
+ *          if the type is an object then the format is: {id: string}.
  */
 export const removeSubscription = (fromStream, toStream, done) => {
   logger.debug('Removing subscription', {from: fromStream, stream: toStream});
