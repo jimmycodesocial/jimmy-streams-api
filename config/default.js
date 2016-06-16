@@ -8,9 +8,9 @@
 
 /* global module */
 
-import winston from 'winston';
+var winston = require('winston');
 
-let logger = new (winston.Logger)({
+const logger = new (winston.Logger)({
   level: 'debug',
   transports: [
     new (winston.transports.Console)({
