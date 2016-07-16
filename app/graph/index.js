@@ -147,9 +147,8 @@ export const removeSubscription = (fromStream, toStream, done) => {
     if (err) {
       return done(err);
     }
-
-    console.log(results);
-    Stream.collection.deleteEdge(results[0].rid, results[1].rid, (err, count) => {console.log(err, count); done(err, count)});
+    console.log(results[0].rid, results[1].rid);
+    Stream.collection.deleteEdge('SUBSCRIBED_TO', results[0].rid, results[1].rid, done);
   });
 };
 
