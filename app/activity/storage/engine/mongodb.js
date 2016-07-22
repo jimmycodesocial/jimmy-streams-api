@@ -44,6 +44,7 @@ export const paginate = (stream, page, limit, filters, done) => {
   return collection.find({stream: stream})
     .skip(startAt)
     .limit(limit)
+    .sort({published: -1})
     .toArray((err, results) => {
       return done(err, results);
   });

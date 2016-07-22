@@ -41,7 +41,7 @@ export const paginate = (stream, page, limit, filters, done) => {
   let startAt = (page - 1) * limit;
   let stopAt = startAt + limit - 1;
 
-  return redis.zrange(stream, startAt, stopAt, (err, results) => {
+  return redis.zrevrange(stream, startAt, stopAt, (err, results) => {
     return done(err, results);
   })
 };
