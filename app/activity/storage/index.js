@@ -6,6 +6,7 @@
 
 'use strict';
 
+import _ from 'lodash';
 import config from 'config';
 import async from 'async';
 import {default as fastEngine} from './engine/redis';
@@ -34,7 +35,10 @@ const paginateFastEngine = (stream, page, limit, filters, done) => {
       });
     }
 
-    return done(err, results || []);
+    // Convert results to JSON objects, because the fast storage saves in string format.
+    let data = _.map(results || [], JSON.parse);
+
+    return done(err, data);
   });
 };
 
