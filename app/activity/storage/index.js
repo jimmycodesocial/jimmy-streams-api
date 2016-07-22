@@ -64,7 +64,10 @@ const paginateHistoricalEngine = (stream, page, limit, filters, done) => {
       });
     }
 
-    return done(err, results || []);
+    // Return the raw activity.
+    let data = _.map(results || [], item => item.activity);
+
+    return done(err, data);
   });
 };
 
